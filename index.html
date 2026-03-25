@@ -5,28 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Create and download invoices in a classic print layout." />
     <title>Invoice Creator — InvoiceDesk</title>
-    <!-- Replace with your real GA4 Measurement ID -->
-    <script>
-      window.GA_MEASUREMENT_ID = "G-XXXXXXXXXX";
-      window.GA_ENABLED = /^G-[A-Z0-9]+$/i.test(window.GA_MEASUREMENT_ID) && window.GA_MEASUREMENT_ID !== "G-XXXXXXXXXX";
-    </script>
-    <script>
-      if (window.GA_ENABLED) {
-        const gaScript = document.createElement("script");
-        gaScript.async = true;
-        gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${window.GA_MEASUREMENT_ID}`;
-        document.head.appendChild(gaScript);
-      }
-    </script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6QBFJW95JK"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag() {
         window.dataLayer.push(arguments);
       }
-      if (window.GA_ENABLED) {
-        gtag("js", new Date());
-        gtag("config", window.GA_MEASUREMENT_ID);
-      }
+      window.gtag = gtag;
+      gtag("js", new Date());
+      gtag("config", "G-6QBFJW95JK");
     </script>
     <link rel="stylesheet" href="styles.css" />
   </head>
