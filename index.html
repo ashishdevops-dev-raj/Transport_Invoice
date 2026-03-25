@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Create and download invoices in a classic print layout." />
+    <title>Invoice Creator — InvoiceDesk</title>
+    <!-- Replace with your real GA4 Measurement ID -->
+    <script>
+      window.GA_MEASUREMENT_ID = "G-XXXXXXXXXX";
+      window.GA_ENABLED = /^G-[A-Z0-9]+$/i.test(window.GA_MEASUREMENT_ID) && window.GA_MEASUREMENT_ID !== "G-XXXXXXXXXX";
+    </script>
+    <script>
+      if (window.GA_ENABLED) {
+        const gaScript = document.createElement("script");
+        gaScript.async = true;
+        gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${window.GA_MEASUREMENT_ID}`;
+        document.head.appendChild(gaScript);
+      }
+    </script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        window.dataLayer.push(arguments);
+      }
+      if (window.GA_ENABLED) {
+        gtag("js", new Date());
+        gtag("config", window.GA_MEASUREMENT_ID);
+      }
+    </script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#invoice-main">Skip to invoice</a>
+    <div class="page">
+      <header class="billhead" aria-label="Billhead">
+        <p id="vendorNameTop" class="billhead-name" contenteditable="true">NIKITA TRADERS</p>
+        <p id="vendorAddressTop" class="billhead-addr" contenteditable="true">
+          Ward No 9, House No-003, Paikarapur, Near-Niser, Jatani, Khordha-752050
+        </p>
+      </header>
+
+      <header class="invoice-titlebar" aria-label="Invoice header">
+        <p class="invoice-title">INVOICE</p>
+      </header>
+
+      <main id="invoice-main" class="invoice-grid" aria-label="Invoice content">
+        <section class="boxed" aria-label="Vendor and invoice meta">
+          <table class="grid-table" aria-label="Vendor and meta table">
+            <tbody>
+              <tr>
+                <td class="grid-left">
+                  <div class="split-2">
+                    <p class="kv" contenteditable="true"><span class="k">Phone No.</span><span class="v">7381579750</span></p>
+                    <p class="kv" contenteditable="true"><span class="k">Email</span><span class="v">bharatkumarupta736@gmail.com</span></p>
+                  </div>
+                </td>
+                <td class="grid-right">
+                  <div class="meta-row">
+                    <span class="meta-k">Invoice No.</span>
+                    <input id="invoiceNo" type="text" autocomplete="off" value="002" />
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td class="grid-left">
+                  <div class="split-2">
+                    <p class="kv" contenteditable="true"><span class="k">Aadhaar No</span><span class="v">348454860452</span></p>
+                    <p class="kv" contenteditable="true"><span class="k">PAN Card No</span><span class="v">AIQPK9098N</span></p>
+                  </div>
+                </td>
+                <td class="grid-right">
+                  <div class="meta-row">
+                    <span class="meta-k">Month</span>
+                    <input id="invoiceMonth" type="text" autocomplete="off" value="February" />
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td class="grid-left">
+                  <p class="kv" contenteditable="true"><span class="k">GST No.</span><span class="v">21AIQPK9098NZD</span></p>
+                </td>
+                <td class="grid-right">
+                  <div class="meta-stack">
+                    <div class="meta-row">
+                      <span class="meta-k">Date</span>
+                      <input id="invoiceDate" type="date" />
+                    </div>
+                    <div class="meta-row">
+                      <span class="meta-k">Location</span>
+                      <input id="invoiceLocation" type="text" autocomplete="off" value="Chandigarh" />
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="boxed" aria-label="To block and customer details">
+          <table class="grid-table" aria-label="Customer table">
+            <tbody>
+              <tr>
+                <td class="grid-left">
+                  <div class="block">
+                    <p class="block-label">TO</p>
+                    <p class="block-value" contenteditable="true" id="customerName">MetroTelworks.Pvt. Ltd</p>
+                    <p class="block-value" contenteditable="true" id="customerAddress">B-804, Lav Kush Tower,</p>
+                    <p class="block-value" contenteditable="true">Exhibition Road, Patna-800001</p>
+                  </div>
+                </td>
+                <td class="grid-right">
+                  <div class="block">
+                    <p class="block-label">GST</p>
+                    <p class="block-value" contenteditable="true" id="customerGst">10AAICM4500G1ZA</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="boxed" aria-label="Vendor bank details and items">
+          <section class="table-wrap" aria-label="Invoice line items">
+            <table id="invoiceTable" class="items-table">
+              <thead>
+                <tr>
+                  <th scope="col" class="col-sn">Sr. No</th>
+                  <th scope="col">Description</th>
+                  <th scope="col" class="col-qty">Quantity</th>
+                  <th scope="col" class="col-rate">Rate</th>
+                  <th scope="col" class="col-amt">Amount</th>
+                  <th scope="col" class="no-print col-action">Action</th>
+                </tr>
+              </thead>
+              <tbody id="itemsBody"></tbody>
+            </table>
+          </section>
+
+          <div class="total-summary-row" aria-live="polite" aria-atomic="true">
+            <p class="amount-words total-summary-left">
+              <span class="amount-words-label">TOTAL:</span>
+              <span id="amountWords" class="amount-words-value">Zero Only.</span>
+            </p>
+            <div class="total-row total-summary-right">
+              <span class="total-label">TOTAL</span>
+              <strong id="grandTotal" class="amount">0.00</strong>
+            </div>
+          </div>
+
+          <p class="section-title">Vendor Bank Details</p>
+          <table class="bank-table" aria-label="Bank details">
+            <tbody>
+              <tr>
+                <td class="bank-k">Bank Name</td>
+                <td contenteditable="true" id="bankName">PUNJAB &amp; SIND BANK</td>
+              </tr>
+              <tr>
+                <td class="bank-k">Branch</td>
+                <td contenteditable="true" id="bankBranch">JATIN, KHURDA(ODISHA)</td>
+              </tr>
+              <tr>
+                <td class="bank-k">Account No</td>
+                <td contenteditable="true" id="bankAccount">12471100000203</td>
+              </tr>
+              <tr>
+                <td class="bank-k">T e of Account</td>
+                <td contenteditable="true" id="bankType">C/A</td>
+              </tr>
+              <tr>
+                <td class="bank-k">Bank IFSC CODE</td>
+                <td contenteditable="true" id="bankIfsc">PSIB0021247</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="sign-row">
+            <div class="sign-left"></div>
+            <div class="sign-right">
+              <p class="sign-name" contenteditable="true" id="signVendor">NIKITA TRADERS</p>
+              <p class="sign-line" contenteditable="true" id="signName">Bharat-kumar</p>
+              <p class="sign-role">Proprietor</p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="actions no-print" aria-label="Actions">
+        <button id="addRowBtn" type="button">+ Add Item</button>
+        <button id="printBtn" type="button">Print</button>
+        <button id="downloadPdfBtn" type="button" aria-busy="false">Download PDF</button>
+      </footer>
+    </div>
+
+    <template id="rowTemplate">
+      <tr>
+        <td class="rowNo"></td>
+        <td><input class="desc" type="text" aria-label="Description" /></td>
+        <td><input class="qty" type="number" min="0" step="1" value="1" aria-label="Quantity" /></td>
+        <td><input class="rate" type="number" min="0" step="0.01" value="0" aria-label="Rate" /></td>
+        <td class="amountCell">0.00</td>
+        <td class="no-print">
+          <button type="button" class="deleteBtn icon-only-btn" aria-label="Delete item" title="Delete item">
+            <svg class="trash-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path
+                fill="currentColor"
+                d="M9 3v1H4v2h1v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6h1V4h-5V3H9zm0 5h2v9H9V8zm4 0h2v9h-2V8z"
+              />
+            </svg>
+          </button>
+        </td>
+      </tr>
+    </template>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

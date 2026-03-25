@@ -1,0 +1,553 @@
+* {
+  box-sizing: border-box;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 8px 12px;
+  background: #111;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  left: 8px;
+  top: 8px;
+}
+
+body {
+  margin: 0;
+  font-family: "Times New Roman", serif;
+  background: #f3f3f3;
+  color: #111;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.page {
+  max-width: 900px;
+  margin: 24px auto;
+  background: #fff;
+  border: 1px solid #222;
+  padding: 12px;
+}
+
+.billhead {
+  border: 1px solid #111;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.billhead-name {
+  margin: 0;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.04em;
+}
+
+.billhead-addr {
+  margin: 4px 0 0;
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.invoice-titlebar {
+  border: 1px solid #111;
+  border-top: none;
+  padding: 6px 10px;
+  text-align: center;
+}
+
+.invoice-title {
+  margin: 0;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.invoice-grid {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.boxed {
+  border: 1px solid #111;
+  padding: 0;
+}
+
+.grid-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #111;
+}
+
+.grid-table td {
+  border: 1px solid #111;
+  vertical-align: top;
+  padding: 8px;
+}
+
+.grid-left {
+  width: 62%;
+}
+
+.grid-right {
+  width: 40%;
+}
+
+.block-label {
+  margin: 0 0 6px;
+  text-align: center;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.block-value {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.block-value[contenteditable="true"]:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 2px;
+}
+
+.meta-row {
+  display: grid;
+  grid-template-columns: minmax(100px, auto) minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+
+.meta-row input {
+  min-width: 0;
+}
+
+.meta-k {
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.meta-stack {
+  display: grid;
+  gap: 8px;
+}
+
+.vendor-details-label {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+label {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+input {
+  width: 100%;
+  border: 1px solid #aaa;
+  padding: 5px 6px;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.split-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.kv {
+  margin: 4px 0;
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  font-size: 14px;
+}
+
+.kv .k {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.kv .v {
+  white-space: nowrap;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+th,
+td {
+  border: 1px solid #111;
+  padding: 4px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+thead th {
+  background: #ececec;
+}
+
+td input {
+  border: none;
+  padding: 2px;
+  text-align: center;
+  background: transparent;
+  color: #111;
+}
+
+/* Avoid yellow browser autofill “highlight” on table inputs */
+td input:-webkit-autofill,
+td input:-webkit-autofill:hover,
+td input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 40px #fff inset;
+  -webkit-text-fill-color: #111;
+}
+
+td input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+td input[type="number"]::-webkit-outer-spin-button,
+td input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.items-table th:nth-child(2),
+.items-table td:nth-child(2) {
+  min-width: 320px;
+}
+
+.items-table td:nth-child(2) input {
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.section-title {
+  margin: 0;
+  padding: 8px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 13px;
+  border-bottom: 1px solid #111;
+}
+
+.bank-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.bank-table td {
+  border: 1px solid #111;
+  padding: 6px 8px;
+  text-align: left;
+  white-space: normal;
+}
+
+.bank-k {
+  width: 36%;
+  font-weight: 700;
+}
+
+.total-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+  padding: 8px;
+  border-top: 1px solid #111;
+  align-items: baseline;
+}
+
+.total-summary-row {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  align-items: stretch;
+  border: 1px solid #111;
+}
+
+.total-summary-left {
+  border-top: 0;
+  margin: 0;
+  padding: 8px;
+  min-width: 0;
+}
+
+.total-summary-right {
+  border-top: 0;
+  border-left: 1px solid #111;
+  margin: 0;
+  padding: 8px;
+  min-width: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.total-summary-left.amount-words {
+  border-top: 0;
+}
+
+.total-label {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.amount-words {
+  margin: 0;
+  padding: 8px;
+  border-top: 1px solid #111;
+  font-size: 14px;
+}
+
+.amount-words-label {
+  font-weight: 700;
+}
+
+.sign-row {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 10px;
+  align-items: end;
+  padding: 10px 8px 12px;
+  border-top: 1px solid #111;
+}
+
+.sign-right {
+  text-align: left;
+}
+
+.sign-name {
+  margin: 0 0 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.sign-line {
+  margin: 0;
+  min-height: 22px;
+  display: inline-block;
+}
+
+.sign-role {
+  margin: 4px 0 0;
+  font-size: 13px;
+}
+
+.actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+/* Avoid doubled outer border in first two header blocks */
+.invoice-grid > .boxed:nth-child(-n + 2) {
+  border: 0;
+}
+
+button {
+  border: 1px solid #111;
+  background: #fff;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+button:hover {
+  background: #ececec;
+}
+
+button:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 2px;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+td input:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 1px;
+}
+
+.amount {
+  font-variant-numeric: tabular-nums;
+}
+
+.icon-only-btn {
+  width: 32px;
+  height: 28px;
+  padding: 0;
+  font-size: 16px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #111;
+}
+
+.icon-only-btn .trash-icon {
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .split-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .sign-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 4mm;
+  }
+
+  body {
+    background: #fff;
+    margin: 0;
+  }
+
+  .page {
+    width: auto;
+    min-height: 0;
+    margin: 0;
+    border: 1px solid #222;
+    max-width: none;
+    padding: 3mm;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    page-break-after: avoid;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .invoice-grid {
+    gap: 4px;
+    margin-top: 4px;
+  }
+
+  .billhead-name {
+    font-size: 14px;
+  }
+
+  .billhead-addr,
+  .invoice-title,
+  .block-value,
+  .kv,
+  input,
+  .bank-table,
+  table {
+    font-size: 11px;
+  }
+
+  .billhead,
+  .invoice-titlebar {
+    padding: 3px 6px;
+  }
+
+  .grid-table td,
+  .bank-table td,
+  th,
+  td {
+    padding: 2px 4px;
+  }
+
+  .section-title {
+    padding: 4px;
+  }
+
+  .sign-row {
+    grid-template-columns: 1fr 260px !important;
+    padding: 4px 6px 6px;
+    gap: 6px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .sign-right {
+    justify-self: end;
+    text-align: left;
+  }
+
+  .sign-name {
+    margin: 0 0 4px;
+  }
+
+  .sign-role {
+    margin: 2px 0 0;
+    font-size: 11px;
+  }
+
+  .sign-line {
+    min-height: 16px;
+  }
+
+  .boxed:last-child {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+/* Export-only tuning for clearer PDF layout */
+body.pdf-export .page {
+  width: 297mm;
+  min-height: 210mm;
+  max-width: none;
+  margin: 0 auto;
+  padding: 6mm;
+}
+
+body.pdf-export table {
+  font-size: 11px;
+}
+
+body.pdf-export th,
+body.pdf-export td {
+  padding: 3px;
+}
+
+body.pdf-export td input {
+  padding: 1px 2px;
+}
+
+body.pdf-export .invoice-title {
+  font-size: 16px;
+}
