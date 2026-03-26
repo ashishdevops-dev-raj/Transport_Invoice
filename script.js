@@ -11,6 +11,7 @@ const PDF_MARGIN_MM = 4;
 const PDF_CANVAS_SCALE = 2;
 const PDF_JPEG_QUALITY = 0.92;
 const PDF_DEFAULT_FILENAME = "GST-Invoice";
+const CSS_DPI = 96;
 
 function trackEvent(eventName, params = {}) {
   if (typeof window.gtag !== "function") return;
@@ -200,6 +201,28 @@ function addCanvasAsPagedPdf(pdf, canvas, marginMm) {
   }
 }
 
+function addCanvasFitToSinglePdfPage(pdf, canvas, marginMm) {
+  const pageInnerW = pdf.internal.pageSize.getWidth() - 2 * marginMm;
+  const pageInnerH = pdf.internal.pageSize.getHeight() - 2 * marginMm;
+
+  const imgAspect = canvas.width / canvas.height;
+  const boxAspect = pageInnerW / pageInnerH;
+  let finalW;
+  let finalH;
+  if (imgAspect > boxAspect) {
+    finalW = pageInnerW;
+    finalH = pageInnerW / imgAspect;
+  } else {
+    finalH = pageInnerH;
+    finalW = pageInnerH * imgAspect;
+  }
+
+  const x = marginMm + (pageInnerW - finalW) / 2;
+  const y = marginMm + (pageInnerH - finalH) / 2;
+  const imgData = canvas.toDataURL("image/jpeg", PDF_JPEG_QUALITY);
+  pdf.addImage(imgData, "JPEG", x, y, finalW, finalH);
+}
+
 function restorePdfUiState(hideElements, pageElement, tableWrap, prevPageMaxWidth, prevTableOverflow, prevTableOverflowX) {
   hideElements.forEach((element) => {
     element.style.display = element.dataset.prevDisplay || "";
@@ -238,6 +261,8 @@ downloadPdfBtn.addEventListener("click", async () => {
   document.body.classList.add("pdf-export");
 
   const prevPageMaxWidth = pageElement.style.maxWidth;
+  const prevPageWidth = pageElement.style.width;
+  const prevPageMargin = pageElement.style.margin;
   const prevTableOverflow = tableWrap ? tableWrap.style.overflow : "";
   const prevTableOverflowX = tableWrap ? tableWrap.style.overflowX : "";
   pageElement.style.maxWidth = "none";
@@ -248,6 +273,17 @@ downloadPdfBtn.addEventListener("click", async () => {
 
   try {
     await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+    const pdf = new JsPDF({
+      orientation: "landscape",
+      unit: "mm",
+      format: "a4",
+      compress: true
+    });
+    const pageInnerW = pdf.internal.pageSize.getWidth() - 2 * PDF_MARGIN_MM;
+    const exportCssWidthPx = Math.max(1, Math.round((pageInnerW / 25.4) * CSS_DPI));
+    pageElement.style.width = `${exportCssWidthPx}px`;
+    pageElement.style.margin = "0";
 
     const canvas = await html2canvas(pageElement, {
       scale: PDF_CANVAS_SCALE,
@@ -260,14 +296,7 @@ downloadPdfBtn.addEventListener("click", async () => {
       windowHeight: pageElement.scrollHeight
     });
 
-    const pdf = new JsPDF({
-      orientation: "landscape",
-      unit: "mm",
-      format: "a4",
-      compress: true
-    });
-
-    addCanvasAsPagedPdf(pdf, canvas, PDF_MARGIN_MM);
+    addCanvasFitToSinglePdfPage(pdf, canvas, PDF_MARGIN_MM);
     pdf.save(fileName);
     trackEvent("download_pdf_success", {
       invoice_no: invoiceNo
@@ -280,6 +309,8 @@ downloadPdfBtn.addEventListener("click", async () => {
     alert("Could not create PDF. Try again or use fewer rows.");
   } finally {
     restorePdfUiState(hideElements, pageElement, tableWrap, prevPageMaxWidth, prevTableOverflow, prevTableOverflowX);
+    pageElement.style.width = prevPageWidth;
+    pageElement.style.margin = prevPageMargin;
     downloadPdfBtn.disabled = false;
     downloadPdfBtn.setAttribute("aria-busy", "false");
     downloadPdfBtn.textContent = pdfLabelDefault;
