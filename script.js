@@ -159,26 +159,45 @@ if (printBtn) {
   });
 }
 
-function addScaledImageToSinglePdfPage(pdf, imgData, marginMm) {
+function addCanvasAsPagedPdf(pdf, canvas, marginMm) {
   const pageInnerW = pdf.internal.pageSize.getWidth() - 2 * marginMm;
   const pageInnerH = pdf.internal.pageSize.getHeight() - 2 * marginMm;
-  const props = pdf.getImageProperties(imgData);
-  const iw = props.width;
-  const ih = props.height;
-  const imgAspect = iw / ih;
-  const boxAspect = pageInnerW / pageInnerH;
-  let finalW;
-  let finalH;
-  if (imgAspect > boxAspect) {
-    finalW = pageInnerW;
-    finalH = pageInnerW / imgAspect;
-  } else {
-    finalH = pageInnerH;
-    finalW = pageInnerH * imgAspect;
+  const mmPerPx = pageInnerW / canvas.width;
+  const pageSliceHeightPx = Math.max(1, Math.floor(pageInnerH / mmPerPx));
+  let yOffsetPx = 0;
+  let pageIndex = 0;
+
+  while (yOffsetPx < canvas.height) {
+    const sliceHeightPx = Math.min(pageSliceHeightPx, canvas.height - yOffsetPx);
+    const pageCanvas = document.createElement("canvas");
+    pageCanvas.width = canvas.width;
+    pageCanvas.height = sliceHeightPx;
+    const pageCtx = pageCanvas.getContext("2d");
+    if (!pageCtx) break;
+
+    pageCtx.drawImage(
+      canvas,
+      0,
+      yOffsetPx,
+      canvas.width,
+      sliceHeightPx,
+      0,
+      0,
+      pageCanvas.width,
+      pageCanvas.height
+    );
+
+    const pageImgData = pageCanvas.toDataURL("image/jpeg", PDF_JPEG_QUALITY);
+    const sliceHeightMm = sliceHeightPx * mmPerPx;
+
+    if (pageIndex > 0) {
+      pdf.addPage();
+    }
+    pdf.addImage(pageImgData, "JPEG", marginMm, marginMm, pageInnerW, sliceHeightMm);
+
+    yOffsetPx += sliceHeightPx;
+    pageIndex += 1;
   }
-  const x = marginMm + (pageInnerW - finalW) / 2;
-  const y = marginMm + (pageInnerH - finalH) / 2;
-  pdf.addImage(imgData, "JPEG", x, y, finalW, finalH);
 }
 
 function restorePdfUiState(hideElements, pageElement, tableWrap, prevPageMaxWidth, prevTableOverflow, prevTableOverflowX) {
@@ -241,7 +260,6 @@ downloadPdfBtn.addEventListener("click", async () => {
       windowHeight: pageElement.scrollHeight
     });
 
-    const imgData = canvas.toDataURL("image/jpeg", PDF_JPEG_QUALITY);
     const pdf = new JsPDF({
       orientation: "landscape",
       unit: "mm",
@@ -249,7 +267,7 @@ downloadPdfBtn.addEventListener("click", async () => {
       compress: true
     });
 
-    addScaledImageToSinglePdfPage(pdf, imgData, PDF_MARGIN_MM);
+    addCanvasAsPagedPdf(pdf, canvas, PDF_MARGIN_MM);
     pdf.save(fileName);
     trackEvent("download_pdf_success", {
       invoice_no: invoiceNo

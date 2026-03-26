@@ -528,11 +528,11 @@ td input:focus-visible {
 
 /* Export-only tuning for clearer PDF layout */
 body.pdf-export .page {
-  width: 297mm;
-  min-height: 210mm;
+  width: auto;
+  min-height: 0;
   max-width: none;
-  margin: 0 auto;
-  padding: 6mm;
+  margin: 0;
+  padding: 3mm;
 }
 
 body.pdf-export table {
